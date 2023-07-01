@@ -2,6 +2,7 @@ import { Post } from "./post.model"
 import { Injectable } from "@angular/core"
 import { Subject } from "rxjs"
 import { HttpClient } from "@angular/common/http"
+import { map } from 'rxjs/operators'
 
 @Injectable({
     providedIn: 'root'
@@ -14,15 +15,23 @@ export class PostsService {
     constructor(private http: HttpClient) {}
 
     getPosts() {
-        this.http.get<{message:string, posts: Post[]}>('http://localhost:3000/api/posts')
-        .subscribe(
-            (postData)=>{
-                console.log('triggered')
-            this.posts = postData.posts;
-            this.postsUpdated.next([...this.posts])
+        this.http.get<{message:string, posts: any}>('http://localhost:3000/api/posts')
+        .pipe(map((postData)=> {
+            return postData.posts.map((post:any) => {
+                return {
+                    title: post.title,
+                    content: post.content,
+                    id: post._id
+                };
+            });
         }
-
-        )
+        ))
+        .subscribe(
+            (transformedPosts)=>{
+                console.log('triggered')
+            this.posts = transformedPosts;
+            this.postsUpdated.next([...this.posts])
+        })
     }
 
     getPostUpdateListener() {
@@ -35,13 +44,29 @@ export class PostsService {
             title: title,
             content: content
         }
-        this.http.post<{message:string}>('http://localhost:3000/api/posts', post)
+        this.http
+        .post<{message:string, postId: string}>('http://localhost:3000/api/posts', post)
         .subscribe((responseData) => {
             console.log(responseData.message)
+            post.id = responseData.postId
             this.posts.push(post)
             this.postsUpdated.next([...this.posts])
         })
 
+    }
+
+    getPost(id: string) {
+        return {...this.posts.find( p => p.id === id)}
+    }
+    
+    
+    deletePost(postId: string){
+        this.http.delete('http://localhost:3000/api/posts/' + postId)
+        .subscribe(() => {
+            const updatedPosts = this.posts.filter(post => post.id !== postId)
+            this.posts = updatedPosts
+            this.postsUpdated.next([...this.posts])
+        })
     }
 
 }
