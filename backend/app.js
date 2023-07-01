@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const Post =require('./models/post')
 const mongoose = require('mongoose')
+require('dotenv').config();
 
-mongoose.connect('mongodb+srv://samnanghay78:WUH5XNHW2dcrLWcM@basil.nt4ljk6.mongodb.net/?retryWrites=true&w=majority')
+
+mongoose.connect(process.env.MONGODB_URI)
     .then(()=> {
         console.log('Connected to database!')
     })
