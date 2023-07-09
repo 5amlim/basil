@@ -10,3 +10,18 @@ mat-form-field, textarea {
 mat-spinner {
     margin: auto
 }
+
+input[type="file"]{
+    visibility: hidden;
+}
+
+.image-preview {
+    width: 10rem;
+    height: auto;
+    margin: 1rem 0
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+}
