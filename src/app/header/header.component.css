@@ -16,3 +16,22 @@ ul li{
 .spacer {
     flex: 1 1 auto;
 }
+
+.logo {
+    display: flex; /* Use Flexbox */
+    justify-content: center; /* Horizontally center the content */
+    align-items: center; /* Vertically center the content */
+    border-radius: 10px;
+    overflow: hidden;
+    width: 12%;
+  }
+  
+  .logo img {
+    width: 100%; /* Make sure the image fills the container */
+    height: auto; /* Automatically adjust the height to maintain aspect ratio */
+  }
+
+mat-toolbar {
+    background-color: rgb(32, 80, 126);
+    color: white
+}

@@ -1,10 +1,22 @@
-<mat-toolbar
-    color="primary"
->
-<span><a routerLink="/">My App</a></span>
-<span class="spacer"></span>
-    <ul>
-        <li><a mat-button routerLink="/create">New Post</a></li>
-        <li><a mat-button routerLink="/auth">Auth</a></li>
-    </ul>
+<mat-toolbar>
+  <span><a routerLink="/"><img class="logo" src="https://i.imgur.com/419VcJG.png"></a></span>
+  <span class="spacer"></span>
+  <ul>
+    <li *ngIf="userIsAuthenticated">
+      <a mat-button routerLink="/create"> <mat-icon>add</mat-icon>Add Post </a>
+    </li>
+    <li *ngIf="!userIsAuthenticated">
+      <a mat-button routerLink="/auth/signup">
+        <mat-icon>person_add</mat-icon>Sign Up
+      </a>
+    </li>
+    <li *ngIf="!userIsAuthenticated">
+      <a mat-button routerLink="/auth/login">
+        <mat-icon>login</mat-icon>Log In
+      </a>
+    </li>
+    <li *ngIf="userIsAuthenticated">
+      <button mat-button (click)="onLogout()">Logout</button>
+    </li>
+  </ul>
 </mat-toolbar>

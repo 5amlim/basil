@@ -3,9 +3,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose')
 const path = require('path')
-require('dotenv').config();
+require('dotenv').config({path: './backend/.env'});
 
 const postsRoutes = require('./routes/posts')
+const authRoutes = require('./routes/auth')
 
 
 mongoose.connect(process.env.MONGODB_URI)
@@ -18,13 +19,13 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
-app.use('/uploads', express.static(path.join('backend/uploads')))
+app.use('/uploads', express.static(path.join('uploads')))
 
 app.use((req, res, next) =>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
         'Access-Control-Allow-Headers', 
-        'Origin, X-Requested-With, Content-Type, Accept'
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
         );
     res.setHeader(
         'Access-Control-Allow-Methods',
@@ -35,5 +36,6 @@ app.use((req, res, next) =>{
 
 
 app.use('/api/posts', postsRoutes)
+app.use('/api/auth', authRoutes)
 
 module.exports = app
